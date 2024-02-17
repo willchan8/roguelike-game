@@ -14,30 +14,21 @@ const reducer = (state = initialState, action) => {
       let enemies = state.enemies.map((enemy) => Object.assign({}, enemy));
       let player = Object.assign({}, state.player);
 
-      let prevPlayerPosition = player.position; // Temp variable to store player position at start of turn
-      let nextPlayerPosition;
-      let nextPlayerDirection;
+      // Player's position at start of turn
+      let prevPlayerPosition = player.position;
 
-      switch (action.keyCode) {
-        case 37: // Left
-          nextPlayerPosition = prevPlayerPosition - 1;
-          nextPlayerDirection = 'west';
-          break;
-        case 38: // Up
-          nextPlayerPosition = prevPlayerPosition - mapWidth;
-          nextPlayerDirection = 'north';
-          break;
-        case 39: // Right
-          nextPlayerPosition = prevPlayerPosition + 1;
-          nextPlayerDirection = 'east';
-          break;
-        case 40: // Down
-          nextPlayerPosition = prevPlayerPosition + mapWidth;
-          nextPlayerDirection = 'south';
-          break;
-        default:
-          break;
-      }
+      let nextPlayerPosition = {
+        37: prevPlayerPosition - 1,
+        38: prevPlayerPosition - mapWidth,
+        39: prevPlayerPosition + 1,
+        40: prevPlayerPosition + mapWidth,
+      }[action.keyCode];
+      let nextPlayerDirection = {
+        37: 'west',
+        38: 'north',
+        39: 'east',
+        40: 'south',
+      }[action.keyCode];
 
       // Player (@) is only able to move onto any adjacent '.' tile
       if (map[nextPlayerPosition] === '.') {
