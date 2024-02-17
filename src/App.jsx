@@ -6,10 +6,6 @@ import store from './redux/store';
 import Level from './components/Level';
 import Logger from './components/Logger';
 
-store.dispatch(actions.setMapSize(20, 10));
-store.dispatch(actions.addEnemy(157));
-store.dispatch(actions.addEnemy(154));
-
 function App() {
   useEffect(() => {
     function handleKeyDown() {
@@ -38,8 +34,15 @@ function App() {
       );
     }
 
+    function initState() {
+      store.dispatch(actions.setMapSize(20, 10));
+      store.dispatch(actions.addEnemy(157));
+      store.dispatch(actions.addEnemy(154));
+    }
+
     handleKeyDown();
     handleClick();
+    initState();
 
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
