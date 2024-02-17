@@ -40,11 +40,11 @@ td {
   height: 1px;
 }
 
-.drawer {
-  width: 99%;
+.logger {
+  width: 100%;
   height: 25%;
   bottom: 0px;
-  border: 5px solid lightgray;
+  border: 4px solid lightgray;
   position: absolute;
   overflow-y: auto;
 }

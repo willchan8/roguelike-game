@@ -1,50 +1,58 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-//This function is responsible for rendering the level and all
-//the entities in it.
-function Level(props) {
-  // Convert the map from a 1-D array to a 2-D array.
-  const { mapHeight, mapWidth, map } = props;
+/**
+ * Convert the map from a 1-D array to a 2-D array.
+ *
+ * @param {object} mapHeight - the height of the map
+ * @param {object} mapWidth - the width of the map
+ * @param {array} map - the 1-D array map
+ * @return {JSX} a table element representing the 2-D map
+ */
+function Level({ mapHeight, mapWidth, map }) {
+  // Convert 1-D array to 2-D array
   const newMap = [];
   for (let i = 0; i < mapHeight; i++) {
     newMap.push(map.slice(i * mapWidth, (i + 1) * mapWidth));
   }
 
-  // Handle conditional style/class changes for player, enemy, and wall.
+  // Helper function for mapping characters to CSS classes
   const handleCharacterStyle = (char) => {
-    switch(char) {
-      case '@':
-        return 'player';
-      case 'e':
-        return 'enemy';
-      case '#':
-        return 'wall';
-      default:
-        return 'text';
-    }
-  }
+    return {
+      '@': 'player',
+      e: 'enemy',
+      '#': 'wall',
+      '.': 'text',
+    }[char];
+  };
 
   return (
     <table className="table">
       <tbody>
-        {newMap.map((row, rowIndex) => 
-          <tr key={rowIndex}>{row.map((square, colIndex) => 
-              <td 
+        {newMap.map((row, rowIndex) => (
+          <tr key={rowIndex}>
+            {row.map((square, colIndex) => (
+              <td
                 className={handleCharacterStyle(square)}
-                index={(rowIndex * mapWidth) + colIndex}
-                key={(rowIndex * mapWidth) + colIndex}
+                index={rowIndex * mapWidth + colIndex}
+                key={rowIndex * mapWidth + colIndex}
               >
                 {square}
               </td>
-            )}
+            ))}
           </tr>
-        )}
+        ))}
       </tbody>
     </table>
   );
-};
+}
 
+/**
+ * Maps state properties to component props.
+ *
+ * @param {object} state - The state object
+ * @return {object} The mapped props object
+ */
 const mapStateToProps = (state) => ({
   mapHeight: state.mapHeight,
   mapWidth: state.mapWidth,
