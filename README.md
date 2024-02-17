@@ -1,65 +1,80 @@
-# Vite React TS Template
+# Roguelike Game
 
-Barebones Vite + React + TypeScript + Tailwind CSS template!
-
-## Table of Contents
-
-- [Overview](#overview)
-- [Requirements](#requirements)
-- [Getting Started](#getting-started)
-- [Important Note](#important-note)
-- [Testing](#testing)
-- [Preparing for Deployment](#preparing-for-deployment)
-- [DevTools](#devtools)
-- [Installed Packages](#installed-packages)
-
-## Overview
-
-Built with type safety, scalability, and developer experience in mind. A batteries included Vite + React template.
-
-- [pnpm](https://pnpm.io) - A strict and efficient alternative to npm with up to 3x faster performance
-- [Vite](https://vitejs.dev) - Feature rich and highly optimized frontend tooling with TypeScript support out of the box
-- [React](https://react.dev) - A modern front-end JavaScript library for building user interfaces based on components
-- [TypeScript](https://www.typescriptlang.org) - A typed superset of JavaScript designed with large scale applications in mind
-- [Tailwind CSS](https://tailwindcss.com) - A utility-first CSS framework packed with classes to build any web design imaginable
-
-A more detailed list of the included packages can be found in the [Installed Packages](#installed-packages) section. Packages not shown above include Devtools, ui helper libraries, and eslint plugins/configs.
-
-## Requirements
-
-- [NodeJS 18+](https://nodejs.org/en)
-- [pnpm](https://pnpm.io) (or equivalent)
-
-## Getting Started
-
-Getting started is a simple as cloning the repository
+This game was created using Vite + React + Redux. To run enter:
 
 ```
-git clone https://github.com/willchan8/vite-react-template.git
+npm install
+npm run dev
 ```
 
-Changing into the new directory
+## About the Game:
 
-```
-cd vite-react-template
-```
+This game is essentially a very simple ASCII-art [roguelike game](https://en.wikipedia.org/wiki/Roguelike). The game is played by pressing the arrow keys to navigate around the room. The player is denoted by the '@' character, and enemies are denoted by the 'e' character. The '.' character signifies an unoccupied tile, and the '#' character represents a solid wall. The game is turn based. 1 turn of the game elapses every time an arrow key is pressed. After the player moves, all enemies in the room will also move. If no keys are pressed nothing should happen. If the player is next to an enemy, and attempts to move in the direction of that enemy, the player will attack it (and not move). The enemy will then attack in return, but the player always attacks first.
 
-Installing dependencies
+The state of the entire game is represented in the redux store. The "map" is a 1 dimensional array containing all the characters that represent the game including the positions of the enemies and the player.
 
-```
-pnpm install
-```
+**Gameplay gif:**
 
-Congrats! You're ready to starting working on that new project!
+![](reactDungeon.gif)
 
-If you'd rather run the commands above in one go, check out the command below:
+# Details:
 
-```
-git clone https://github.com/willchan8/vite-react-template.git &&\
-cd vite-react-template &&\
-pnpm install &&\
-```
+## 1: Level Component
 
-## Installed Packages
+The level component is in Level.jsx. This component is responsible for rendering the level for the player.
 
-A simplified list can be found in the [Overview](#overview) section.
+1. Map is retrieved from the redux store and display it as an html table.
+
+2. The value of index should match the index of where that element appears in the map array.
+
+3. If the character in a cell is the player ('@'), enemy ('e'), or a wall ('#') apply the corresponding css styling defined in index.css.
+
+## 2: Step Reducer
+
+The step action is dispatched every time an arrow key is pressed. A single "step" represents one complete turn in the game. The next state of the entire game is computeed after each step action is dispatched.
+
+1. The player moves in the direction of the arrow key that was pressed
+
+   - The player can move onto any adjacent '.' tile.
+   - If the player cannot move in that direction, the rest of the turn still plays out.
+
+2. All enemies move towards the player
+
+   - A BFS algorithm is used for moving the enemies towards the player ([Breadth First Search](https://en.wikipedia.org/wiki/Breadth-first_search)).
+
+3. Player attacks performed against enemies
+
+   - The player attacks only the enemy they attempt to move towards.
+   - The player can only attack an enemy who was occupying an adjacent tile when the turn began.
+   - The enemies health should be reduced by an amount equal to the player's damage.
+   - If an enemies health is 0 or less, remove the enemy from the game.
+
+4. Enemy attacks against the player
+
+   - Enemies adjacent to the player will attack.
+   - If the player started a turn adjacent to an enemy and moves away, the player still gets attacked by that enemy.
+   - Enemy attacks are always calculated **after** any player attacks.
+   - The player's health should be reduced by an amount equal to the enemies damage.
+
+5. Best practices followed for writing reducers:
+   - Does not mutate the current state.
+   - Does not create any side effects in the reducer. The reducer should be pure. ([Pure Function](https://en.wikipedia.org/wiki/Pure_function)).
+   - Only calculate the next state and return it.
+
+## 3: Logger component
+
+Feedback is provided to the player via Logger Component in Logger.jsx.
+
+The Logger Component is in Logger.jsx. The Logger is the grey rectangle at the bottom of the screen. Because this game uses a very minimal graphical interface, the logger provides more feedback to the player. The purpose of the Logger is to display all the events that happen to the player in the form of text. The list grows downward and is contained within the rectangle.
+
+1. When the player moves, the message "player moved x" where x is the direction the player moved in (north, east, south, west) is display.
+
+   - If the player could not move in the direction of the arrow key of the dispatched step action, no message should display.
+
+2. When a player attacks an enemy, the message "player attacked enemy" displays.
+
+3. When an enemy attacks a player, the message "enemy attacked player" displays.
+
+4. The Logger displays a maximum of 20 messages.
+
+5. The scrollbar auto-scrolls to the bottom of the list of displayed messages.
