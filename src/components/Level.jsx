@@ -1,19 +1,12 @@
-import React from 'react';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
-/**
- * Convert the map from a 1-D array to a 2-D array.
- *
- * @param {object} mapHeight - the height of the map
- * @param {object} mapWidth - the width of the map
- * @param {array} map - the 1-D array map
- * @return {JSX} a table element representing the 2-D map
- */
-function Level({ mapHeight, mapWidth, map }) {
+function Level() {
+  const { mapHeight, mapWidth, map } = useSelector((state) => state.game);
+
   // Convert 1-D array to 2-D array
-  const newMap = [];
+  const gameMap = [];
   for (let i = 0; i < mapHeight; i++) {
-    newMap.push(map.slice(i * mapWidth, (i + 1) * mapWidth));
+    gameMap.push(map.slice(i * mapWidth, (i + 1) * mapWidth));
   }
 
   // Helper function for mapping characters to CSS classes
@@ -29,7 +22,7 @@ function Level({ mapHeight, mapWidth, map }) {
   return (
     <table className="table">
       <tbody>
-        {newMap.map((row, rowIndex) => (
+        {gameMap.map((row, rowIndex) => (
           <tr key={rowIndex}>
             {row.map((square, colIndex) => (
               <td
@@ -47,17 +40,4 @@ function Level({ mapHeight, mapWidth, map }) {
   );
 }
 
-/**
- * Maps state properties to component props.
- *
- * @param {object} state - The state object
- * @return {object} The mapped props object
- */
-const mapStateToProps = (state) => ({
-  mapHeight: state.mapHeight,
-  mapWidth: state.mapWidth,
-  map: state.map,
-  player: state.player,
-});
-
-export default connect(mapStateToProps)(Level);
+export default Level;

@@ -1,12 +1,13 @@
 import { useEffect } from 'react';
 import './styles/index.css';
-import { Provider } from 'react-redux';
-import * as actions from './redux/actions';
-import store from './redux/store';
+import { useDispatch } from 'react-redux';
+import { movePlayer, setMapSize, addEnemy } from './redux/slices/gameSlice';
 import Level from './components/Level';
 import Logger from './components/Logger';
 
 function App() {
+  const dispatch = useDispatch();
+
   useEffect(() => {
     function handleKeyDown() {
       window.addEventListener(
@@ -14,7 +15,7 @@ function App() {
         (e) => {
           const arrowKeys = new Set([37, 39, 38, 40]);
           if (arrowKeys.has(e.keyCode)) {
-            store.dispatch(actions.step(e.keyCode));
+            dispatch(movePlayer(e.keyCode));
           }
         },
         false
@@ -35,9 +36,9 @@ function App() {
     }
 
     function initState() {
-      store.dispatch(actions.setMapSize(20, 10));
-      store.dispatch(actions.addEnemy(157));
-      store.dispatch(actions.addEnemy(154));
+      dispatch(setMapSize({ width: 20, height: 10 }));
+      dispatch(addEnemy(154));
+      dispatch(addEnemy(157));
     }
 
     handleKeyDown();
@@ -51,10 +52,10 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store} className="App">
+    <>
       <Level />
       <Logger />
-    </Provider>
+    </>
   );
 }
 

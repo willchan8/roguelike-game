@@ -1,11 +1,10 @@
-import { createStore } from 'redux';
-import reducer from './reducer';
-import { initialState } from './initialState';
+import { configureStore } from '@reduxjs/toolkit';
+import gameSlice from './slices/gameSlice';
 
-const store = createStore(
-  reducer,
-  initialState,
-  window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
-);
+const store = configureStore({
+  reducer: {
+    game: gameSlice,
+  },
+});
 
 export default store;
