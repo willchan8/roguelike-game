@@ -1,12 +1,15 @@
 import { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
 
 function Logger() {
-  const log = useSelector((state) => state.game.log);
-  const loggerRef = useRef(null);
+  const log = useSelector((state: RootState) => state.game.log);
+  const loggerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    loggerRef.current.scroll(0, loggerRef.current.scrollHeight);
+    if (loggerRef.current) {
+      loggerRef.current.scroll(0, loggerRef.current.scrollHeight);
+    }
   }, [log.length]);
 
   return (

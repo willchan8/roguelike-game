@@ -27,7 +27,7 @@ function App() {
       window.addEventListener(
         'click',
         (e) => {
-          const index = Number(e.target.getAttribute('index'));
+          const index = Number((e.target as HTMLElement).getAttribute('data-index'));
           if (index === 0 || index === undefined) return;
           console.log(`clicked index: ${index}`);
         },

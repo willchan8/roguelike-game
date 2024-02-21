@@ -1,6 +1,6 @@
 # Roguelike Game
 
-This game was created using Vite + React + Redux. To run enter:
+This game was created using Vite + TypeScript + React + Redux. To run enter:
 
 ```
 npm install
@@ -55,11 +55,6 @@ The step action is dispatched every time an arrow key is pressed. A single "step
    - If the player started a turn adjacent to an enemy and moves away, the player still gets attacked by that enemy.
    - Enemy attacks are always calculated **after** any player attacks.
    - The player's health should be reduced by an amount equal to the enemies damage.
-
-5. Best practices followed for writing reducers:
-   - Does not mutate the current state.
-   - Does not create any side effects in the reducer. The reducer should be pure. ([Pure Function](https://en.wikipedia.org/wiki/Pure_function)).
-   - Only calculate the next state and return it.
 
 ## 3: Logger component
 

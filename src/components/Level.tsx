@@ -1,16 +1,18 @@
 import { useSelector } from 'react-redux';
+import { RootState } from '../redux/store';
+import { MapElement } from '../types/shared';
 
 function Level() {
-  const { mapHeight, mapWidth, map } = useSelector((state) => state.game);
+  const { mapHeight, mapWidth, map } = useSelector((state: RootState) => state.game);
 
   // Convert 1-D array to 2-D array
-  const gameMap = [];
+  const gameMap: MapElement[][] = [];
   for (let i = 0; i < mapHeight; i++) {
     gameMap.push(map.slice(i * mapWidth, (i + 1) * mapWidth));
   }
 
   // Helper function for mapping characters to CSS classes
-  const handleCharacterStyle = (char) => {
+  const handleCharacterStyle = (char: MapElement) => {
     return {
       '@': 'player',
       e: 'enemy',
@@ -27,7 +29,7 @@ function Level() {
             {row.map((square, colIndex) => (
               <td
                 className={handleCharacterStyle(square)}
-                index={rowIndex * mapWidth + colIndex}
+                data-index={rowIndex * mapWidth + colIndex}
                 key={rowIndex * mapWidth + colIndex}
               >
                 {square}

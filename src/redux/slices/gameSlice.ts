@@ -1,7 +1,17 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import BFS from '../../utils/BFS';
+import { MapElement, Sprite } from '../../types/shared';
 
-const initialState = {
+interface GameState {
+  mapHeight: number;
+  mapWidth: number;
+  map: MapElement[];
+  player: Sprite;
+  enemies: Sprite[];
+  log: string[];
+}
+
+const initialState: GameState = {
   mapHeight: 0,
   mapWidth: 0,
   // 1 dimensional array representing the map
@@ -30,10 +40,9 @@ export const gameSlice = createSlice({
   initialState,
   reducers: {
     movePlayer: (state, action) => {
-      const keyCode = action.payload;
+      const keyCode: 37 | 38 | 39 | 40 = action.payload;
 
-      const mapWidth = state.mapWidth;
-      const mapHeight = state.mapHeight;
+      const { mapWidth, mapHeight } = state;
 
       // Make copies of individual states to prevent mutating original state
       let log = [...state.log];
@@ -119,7 +128,7 @@ export const gameSlice = createSlice({
     },
     setMapSize: (state, action) => {
       const { height, width } = action.payload;
-      let map = [];
+      let map: MapElement[] = [];
       const dimension = height * width;
 
       for (let i = 0; i < dimension; i++) {
@@ -130,14 +139,13 @@ export const gameSlice = createSlice({
           map.push('.');
         }
       }
+
       // Put player in top-left corner
       map[width + 1] = '@';
-      // let player = Object.assign({}, state.player);
       state.player.position = width + 1;
       state.mapHeight = height;
       state.mapWidth = width;
       state.map = map;
-      // state.player = player;
     },
     addEnemy: (state, action) => {
       const index = action.payload;
