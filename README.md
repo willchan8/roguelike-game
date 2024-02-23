@@ -21,7 +21,7 @@ The state of the entire game is represented in the redux store. The "map" is a 1
 
 ## 1: Level Component
 
-The level component is in Level.jsx. This component is responsible for rendering the level for the player.
+The level component is in Level.tsx. This component is responsible for rendering the level for the player.
 
 1. Map is retrieved from the redux store and display it as an html table.
 
@@ -56,11 +56,11 @@ The step action is dispatched every time an arrow key is pressed. A single "step
    - Enemy attacks are always calculated **after** any player attacks.
    - The player's health should be reduced by an amount equal to the enemies damage.
 
-## 3: Logger component
+## 3: Logger Component
 
-Feedback is provided to the player via Logger Component in Logger.jsx.
+Feedback is provided to the player via Logger Component in Logger.
 
-The Logger Component is in Logger.jsx. The Logger is the grey rectangle at the bottom of the screen. Because this game uses a very minimal graphical interface, the logger provides more feedback to the player. The purpose of the Logger is to display all the events that happen to the player in the form of text. The list grows downward and is contained within the rectangle.
+The Logger Component is in Logger.tsx. The Logger is the grey rectangle at the bottom of the screen. Because this game uses a very minimal graphical interface, the logger provides more feedback to the player. The purpose of the Logger is to display all the events that happen to the player in the form of text. The list grows downward and is contained within the rectangle.
 
 1. When the player moves, the message "player moved x" where x is the direction the player moved in (north, east, south, west) is display.
 
